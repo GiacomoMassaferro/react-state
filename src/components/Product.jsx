@@ -1,8 +1,10 @@
 import { useState } from 'react'
 function Product(props) {
 
-    const [price, setTotal] = useState(Number(props.price) * Number(props.qta))
-    const [qta, setQta] = useState(Number(props.qta))
+    const [price, setTotal] = useState(Number(props.price) * Number(props.qta));
+    const [qta, setQta] = useState(Number(props.qta));
+    const [isDiscounted, setDiscount] = useState(Number(props.qta) > 4);
+
     function decreaseQta() {
         setQta(qta - 1)
         calcTotalPrice(qta - 1);
@@ -12,7 +14,13 @@ function Product(props) {
         calcTotalPrice(qta + 1);
     }
     function calcTotalPrice(newQta) {
-        const result = props.price * newQta;
+        let result = props.price * newQta;
+        if (newQta > 4) {
+            setDiscount(true);
+            result = result * 0.9;
+        } else {
+            setDiscount(false);
+        }
         setTotal(result);
     }
 
@@ -28,6 +36,9 @@ function Product(props) {
                     <button type="button" className="btn btn-primary" onClick={increaseQta}>+</button>
                 </div>
                 <p>Il totale è {price}</p>
+                {
+                    isDiscounted && <h3>Prezzo scontato</h3>
+                }
             </div>
         </div>
     )
